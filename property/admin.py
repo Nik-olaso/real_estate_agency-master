@@ -3,12 +3,13 @@ from .models import Flat, Complaint, Owner
 
 
 class OwnerInline(admin.TabularInline):
-    model = Owner.owners_flats.through
+    model = Owner.flats.through
     raw_id_fields = [
         "owner",
     ]
 
 
+@admin.register(Flat)
 class FlatAdmin(admin.ModelAdmin):
     search_fields = [
         "owner",
@@ -24,7 +25,6 @@ class FlatAdmin(admin.ModelAdmin):
         "new_building",
         "construction_year",
         "town",
-        "owners_phonenumber",
         "owner_pure_phone",
     ]
     list_editable = [
@@ -38,9 +38,12 @@ class FlatAdmin(admin.ModelAdmin):
     raw_id_fields = [
         "liked_by",
     ]
-    inlines = [OwnerInline]
+    inlines = [
+        OwnerInline,
+    ]
 
 
+@admin.register(Complaint)
 class ComplaintAdmin(admin.ModelAdmin):
     raw_id_fields = [
         "flat",
@@ -48,12 +51,8 @@ class ComplaintAdmin(admin.ModelAdmin):
     ]
 
 
+@admin.register(Owner)
 class OwnerAdmin(admin.ModelAdmin):
     raw_id_fields = [
-        "owners_flats",
+        "flats",
     ]
-
-
-admin.site.register(Flat, FlatAdmin)
-admin.site.register(Complaint, ComplaintAdmin)
-admin.site.register(Owner, OwnerAdmin)

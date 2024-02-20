@@ -9,7 +9,7 @@ class Flat(models.Model):
         "ФИО владельца",
         max_length=200,
     )
-    owner_pure_phone = PhoneNumberField(
+    pure_phone = PhoneNumberField(
         "Нормализованный номер владельца",
         region="RU",
         blank=True,
@@ -101,14 +101,14 @@ class Complaint(models.Model):
         User,
         on_delete=models.SET_NULL,
         verbose_name="Кто жаловался",
-        related_name="author_complain",
+        related_name="authors",
         null=True,
     )
     flat = models.ForeignKey(
         Flat,
         on_delete=models.SET_NULL,
         verbose_name="Квартира, на которую жаловались",
-        related_name="flat_complain",
+        related_name="flats",
         null=True,
     )
     text = models.TextField(
@@ -120,7 +120,7 @@ class Complaint(models.Model):
 
 
 class Owner(models.Model):
-    owner = models.CharField(
+    name = models.CharField(
         "ФИО владельца",
         max_length=200,
         db_index=True,
@@ -136,9 +136,9 @@ class Owner(models.Model):
         Flat,
         verbose_name="Квартиры в собственности",
         null=True,
-        related_name="flats",
+        related_name="owners",
         db_index=True,
     )
 
     def __str__(self):
-        return f"{self.owner}"
+        return self.name
